@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request0r</title>
+    <style>
+        body{
+            background-color: aliceblue;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        .main{
+            font-size:60px;
+        }
+        .select{
+            display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: center;
+align-items: flex-start;
+align-content: flex-start;
+        }
+        button{
+            font-size:20px;
+            background-color: rgb(110, 199, 110);
+            border-radius: 40px 40px 40px 40px;
+            padding:15px;
+            border-style:none;
+        }
+        button:hover{
+background-color: rgb(172, 236, 172);
+        }
+        #resulting{
+            padding:25px;
+            background-color: white;
+            border-radius: 40px 40px 40px 40px;
+            -display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: flex-start;
+align-items: flex-start;
+align-content: flex-start;
+margin-left:10%;
+width: 75%;
+        }
+        input{
+            background-color: white;
+            padding:15px;
+            font-size:20px;
+            border-radius: 20px 20px 20px 20px;
+        }
+        input:focus{
+            background-color: rgb(253, 244, 227);
+        }
+    </style>
+    <script>
+        function send_get(){
+            async function getData() {
+  const url = document.getElementById('ip').value;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.text();
+    document.getElementById('resulting').innerText = json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+getData();
+        }
+        function get(){
+            document.getElementsByClassName("select")[0].innerHTML = "";
+            document.getElementById('select-text').innerHTML = "";
+            document.getElementById('resulting').innerHTML='<center><input type="text" id="ip" placeholder="Ip ex.(http://8.8.8.8)" required/><button onclick="send_get()">Send request</button></center>';
+        }
+        var postjson = {};
+        function addpostvalue(){
+            let name = document.getElementById('name').value;
+            let value = document.getElementById('value').value;
+            postjson[name] = value;
+            document.getElementById('values').innerHTML = "";
+            Object.entries(postjson).forEach((element) => {
+                document.getElementById('values').innerHTML += `<p>${element[0]} : ${element[1]}</p>`;
+            });
+        }
+        function post_send(){
+            async function getData() {
+  const url = document.getElementById('ip').value;
+  try {
+    const response = await fetch(url ,{
+        method: "POST",
+        body: JSON.stringify(postjson)
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.text();
+    document.getElementById('resulting').innerText = json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+getData();
+        }
+        function post(){
+            document.getElementsByClassName("select")[0].innerHTML = "";
+            document.getElementById('select-text').innerHTML = "";
+            document.getElementById('resulting').innerHTML = '<center><input type="text" id="ip" placeholder="Ip ex.(http://8.8.8.8)" style="width:50%;"required/><br><div id="values"></div><br><input id="name" type="text" placeholder="Name of value"/><input id="value" type="text" placeholder="Value"/><button onclick="addpostvalue()">+</button><br><br><button onclick="post_send()">Send request</button></center>'
+        }
+    </script>
+</head>
+<body>
+    <center><h1 class="main">Request0r</h1></center><br>
+    <center>
+        <h1 id="select-text">Select type of your request:</h1>
+        <div class="select">
+            <button onclick="post()">POST request</button>
+            <p style="width:20%;"></p>
+            <button onclick="get()">GET request</button>
+        </div>
+        <br>
+    </center>
+        <div id="resulting">
+        </div>
+    
+    
+    
+</body>
+</html>
